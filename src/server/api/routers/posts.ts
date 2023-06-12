@@ -6,7 +6,7 @@ import {TRPCError} from "@trpc/server";
 
 import {createTRPCRouter, publicProcedure} from "~/server/api/trpc";
 const filterUserForClient = (user: User) => {
-  return {id: user.id, name: user.username, profileImageUrl: user.profileImageUrl};
+  return {id: user.id, username: user.username, profileImageUrl: user.profileImageUrl};
 };
 
 export const postRouter = createTRPCRouter({
@@ -30,7 +30,10 @@ export const postRouter = createTRPCRouter({
 
       return {
         post,
-        author,
+        author: {
+          ...author,
+          username: author.username,
+        },
       };
     });
   }),

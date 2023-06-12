@@ -27,9 +27,14 @@ const PostView = (props: PostWithUser) => {
   const {post, author} = props;
 
   return (
-    <div key={post.id} className="border-b border-slate-400 p-8">
-      <img alt="profile" src={author.profileImageUrl} />
-      {post.content}
+    <div key={post.id} className="flex gap-3 border-b border-slate-400 p-4">
+      <img alt="profile" className="h-14 w-14 rounded-full" src={author.profileImageUrl} />
+      <div className="flex flex-col">
+        <div className="flex">
+          <span>{`@${author.username!}`}</span>
+        </div>
+        <span>{post.content}</span>
+      </div>
     </div>
   );
 };
@@ -39,8 +44,12 @@ const Home: NextPage = () => {
 
   if (isLoading) return <div>Loading...</div>;
 
-  if (!data) return <div>Something went wrong</div>;
-  console.log(data);
+  if (!data)
+    return (
+      <SignedOut>
+        <SignInButton />
+      </SignedOut>
+    );
 
   return (
     <>
@@ -55,9 +64,6 @@ const Home: NextPage = () => {
             <SignedIn>
               <CreatePostWizard />
             </SignedIn>
-            <SignedOut>
-              <SignInButton />
-            </SignedOut>
           </div>
           <div>
             {[...data, ...data].map((fullPost) => (
