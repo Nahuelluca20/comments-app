@@ -5,7 +5,9 @@ import Head from "next/head";
 import {api} from "~/utils/api";
 
 const Home: NextPage = () => {
-  const data = api.example.getAll.useQuery();
+  const {data} = api.example.getAll.useQuery();
+
+  console.log(data);
 
   return (
     <>
@@ -22,6 +24,11 @@ const Home: NextPage = () => {
         <SignedOut>
           <SignInButton />
         </SignedOut>
+        <div>
+          {data?.map((post) => (
+            <div key={post.id}>{post.content}</div>
+          ))}
+        </div>
       </main>
     </>
   );
