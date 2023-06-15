@@ -7,6 +7,7 @@ import Image from "next/image";
 
 import type {RouterOutputs} from "~/utils/api";
 import {api} from "~/utils/api";
+import LoadingSpiner from "~/components/loading";
 
 dayjs.extend(relativeTime);
 dayjs.extend(relativeTime);
@@ -55,7 +56,7 @@ const PostView = (props: PostWithUser) => {
 const Home: NextPage = () => {
   const {data, isLoading} = api.posts.getAll.useQuery();
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <LoadingSpiner />;
 
   if (!data)
     return (
