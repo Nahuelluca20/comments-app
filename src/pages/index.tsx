@@ -7,9 +7,8 @@ import Image from "next/image";
 
 import type {RouterOutputs} from "~/utils/api";
 import {api} from "~/utils/api";
-import LoadingSpiner from "~/components/loading";
+import {LoadingPage} from "~/components/loading";
 
-dayjs.extend(relativeTime);
 dayjs.extend(relativeTime);
 
 const CreatePostWizard = () => {
@@ -53,12 +52,29 @@ const PostView = (props: PostWithUser) => {
   );
 };
 
+const Feed = () => {
+  const {data, isLoading: postLoading} = api.posts.getAll.useQuery();
+
+  if (postLoading) return <LoadingPage />;
+
+  if (!data) return <div>Something went wrong</div>;
+
+  return (
+    <div>
+      {[...data, ...data].map((fullPost) => (
+        <PostView {...fullPost} key={fullPost.post.id} />
+      ))}
+    </div>
+  );
+};
+
 const Home: NextPage = () => {
-  const {data, isLoading} = api.posts.getAll.useQuery();
+  const {isLoaded: userLoaded, isSignedIn} = useUser();
 
-  if (isLoading) return <LoadingSpiner />;
+  //Start fetching asap
+  api.posts.getAll.useQuery();
 
-  if (!data)
+  if (!userLoaded || isSignedIn)
     return (
       <SignedOut>
         <SignInButton />
@@ -79,11 +95,7 @@ const Home: NextPage = () => {
               <CreatePostWizard />
             </SignedIn>
           </div>
-          <div>
-            {[...data, ...data].map((fullPost) => (
-              <PostView {...fullPost} key={fullPost.post.id} />
-            ))}
-          </div>
+          <Feed />
         </div>
       </main>
     </>

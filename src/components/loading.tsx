@@ -1,15 +1,19 @@
 import React from "react";
 
-// interface Props {}
+interface LoadingSpinnerProps {
+  size?: number;
+}
 
-const LoadingSpiner: React.FC = ({}) => {
+const LoadingSpiner: React.FC<LoadingSpinnerProps> = ({size}) => {
   return (
     <div role="status">
       <svg
         aria-hidden="true"
-        className="mr-2 h-8 w-8 animate-spin fill-slate-300 text-slate-200 dark:text-slate-600"
+        className="animate-spin fill-slate-300 text-slate-200 dark:text-slate-600"
         fill="none"
+        height={size ?? 40}
         viewBox="0 0 100 101"
+        width={size ?? 40}
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
@@ -27,3 +31,11 @@ const LoadingSpiner: React.FC = ({}) => {
 };
 
 export default LoadingSpiner;
+
+export const LoadingPage: React.FC = ({}) => {
+  return (
+    <div className="absolute right-0 top-0 flex h-screen w-screen items-center justify-center">
+      <LoadingSpiner size={60} />
+    </div>
+  );
+};
