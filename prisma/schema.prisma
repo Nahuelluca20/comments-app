@@ -25,3 +25,4 @@ model Post {
 
   @@index([authorId])
 }
+
